@@ -2,14 +2,17 @@
 import sys
 import click
 
+from pyscihub import SciHub
+
 
 @click.command()
 def main(args=None):
     """Console script for pyscihub."""
-    click.echo("Replace this message by putting your code into "
-               "pyscihub.cli.main")
-    click.echo("See click documentation at https://click.palletsprojects.com/")
-    return 0
+    scihub = SciHub("https://sci-hub.se", "output")
+
+    data = scihub.fetch_search(
+        "A heuristic algorithm for a single vehicle static bike sharing rebalancing problem"
+    )
 
 
 if __name__ == "__main__":
