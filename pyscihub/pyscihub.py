@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from pathlib import Path
+import unicodedata
 
 
 class SciHub(object):
@@ -28,7 +29,7 @@ class SciHub(object):
             logging.error(f"Could not connect to Sci-Hub via: {response.url}")
         else:
             # if status code is okay then transform into beautiful soup
-            soup = BeautifulSoup(response.text)
+            soup = BeautifulSoup(response.text, features="lxml")
             data = self.extract_data(soup)
 
             if self.is_valid(data):
@@ -62,10 +63,10 @@ class SciHub(object):
         response = requests.get(data["pdf"])
 
         if response.status_code == 200:
-                value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    value = unicode(re.sub('[-\s]+', '-', value))
-            fn_name = f"{data['citation']}.pdf"
+            fn_name = unicodedata.normalize("NFKD", data["citation"])
+            fn_name = re.sub(r"[^\w\s-]", "", fn_name).strip().lower()
+            fn_name = re.sub(r"[-\s]+", "-", fn_name)
+            fn_name = f"{fn_name}.pdf"
 
             with open(self.output_path / fn_name, "wb") as pdf:
                 pdf.write(response.content)
