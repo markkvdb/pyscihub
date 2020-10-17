@@ -29,6 +29,7 @@ Installation
 Installing the Sci-Hub CLI is easiest using pip as
 
 .. code-block:: bash
+
     pip install -e .
 
 Usage
