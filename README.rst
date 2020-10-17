@@ -28,21 +28,18 @@ Installation
 
 Installing the Sci-Hub CLI is easiest using pip as
 
-``bash
-pip install -e .
-``
+.. code-block:: bash
+    pip install -e .
 
 Usage
 --------
 
 Tool can be used with a single query, e.g.,
 
-``bash
-pyscihub single "Your paper"
-``
+.. code-block:: bash
+    pyscihub single "Your paper"
 
 or with a user-provided file containing one query per line as
 
-``bash
-pyscihub file demo.txt
-``
+.. code-block:: bash
+    pyscihub file demo.txt
