@@ -37,9 +37,11 @@ Usage
 Tool can be used with a single query, e.g.,
 
 .. code-block:: bash
+
     pyscihub single "Your paper"
 
 or with a user-provided file containing one query per line as
 
 .. code-block:: bash
+
     pyscihub file demo.txt
