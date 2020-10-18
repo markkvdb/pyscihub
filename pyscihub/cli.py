@@ -1,8 +1,10 @@
 """Console script for pyscihub."""
 import sys
 import click
+from time import sleep
+from random import gauss
 
-from . import SciHub
+from pyscihub import SciHub
 
 
 @click.group()
@@ -13,9 +15,7 @@ from . import SciHub
     default="./output/",
     type=click.Path(exists=True),
 )
-@click.option(
-    "--verbose", "-v", help="Print info about all requests", default=False, type=bool
-)
+@click.option("--verbose", is_flag=True)
 @click.pass_context
 def cli(ctx, output, verbose):
     """CLI to download PDFs from Sci-Hub."""
@@ -42,6 +42,9 @@ def make_file(ctx, file_path):
             except:
                 click.echo(f"Something went wrong for query: {query}")
 
+            # respect sci-hub
+            sleep(gauss(1.0, 0.2))
+
 
 @cli.command("single")
 @click.argument("query", type=str)
@@ -61,4 +64,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main)  # pragma: no cover
+    main()  # pragma: no cover

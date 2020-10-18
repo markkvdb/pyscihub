@@ -1,2 +1,2 @@
-"A heuristic algorithm for a single vehicle static bike sharing rebalancing problem"
-"Iterated local search: Framework and applications"
+A heuristic algorithm for a single vehicle static bike sharing rebalancing problem
+Iterated local search: Framework and applications

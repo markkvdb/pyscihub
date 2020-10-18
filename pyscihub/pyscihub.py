@@ -43,18 +43,16 @@ class SciHub(object):
         )[0][0]
 
         return {
-            "citation": soup.find("div", id="citation").string,
+            "citation": soup.find("div", id="citation").get_text(),
             "link": soup.find("div", id="link").find("a")["href"],
             "pdf": pdf_url,
         }
 
     def is_valid(self, data):
         """Check if data is valid"""
-        if data["citation"] == "" or data["link"] == "" or data["pdf"] == "":
-            logging.error("Could not extract data")
+        if data["citation"] is None or data["link"] is None or data["pdf"] is None:
             return False
         else:
-            # TODO
             return True
 
     def save_pdf(self, data):
