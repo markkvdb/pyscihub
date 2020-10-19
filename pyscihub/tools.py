@@ -1,6 +1,8 @@
 """Tools for handling queries."""
 
 import re
+import os
+import logging
 
 
 def ref_regex():
@@ -59,11 +61,29 @@ def extract_valid_query(string):
 
     if (mo := re.search(DOI_REGEX, string)) is not None:
         query = mo.group()
+        logging.debug(f"{query} is DOI.")
     elif (mo := re.search(URL_REGEX, string)) is not None:
         query = mo.group()
+        logging.debug(f"{query} is URL.")
     elif (mo := re.search(REF_REGEX, string)) is not None:
         query = mo.group("title")
+        logging.debug(f"{query} is title.")
     else:
         return None
 
     return query
+
+
+def valid_fn(path, fn_name):
+    PC_PATH_MAX = os.pathconf("/", "PC_PATH_MAX") - 4
+    PC_NAME_MAX = os.pathconf("/", "PC_NAME_MAX") - 4
+    full_len = len(path + fn_name)
+
+    if full_len > os.pathconf("/", "PC_PATH_MAX"):
+        logging.debug("Path too long. Will shorten.")
+        fn_name = fn_name[0 : (PC_PATH_MAX - full_len)]
+    if len(fn_name) > PC_NAME_MAX:
+        logging.debug("File name too long. Will shorten.")
+        fn_name = fn_name[0 : (PC_NAME_MAX - len(fn_name))]
+
+    return fn_name

@@ -35,15 +35,7 @@ def make_file(ctx, file_path):
     with open(file_path, "r") as f:
         queries = f.readlines()
 
-    with click.progressbar(queries) as bar:
-        for query in bar:
-            try:
-                scihub.fetch_search(query)
-            except:
-                click.echo(f"Something went wrong for query: {query}")
-
-            # respect sci-hub
-            sleep(gauss(1.0, 0.2))
+    scihub.download(queries)
 
 
 @cli.command("single")
@@ -51,12 +43,7 @@ def make_file(ctx, file_path):
 @click.pass_context
 def make_query(ctx, query):
     scihub = SciHub("https://sci-hub.se", ctx.obj["OUTPUT"])
-
-    try:
-        scihub.fetch_search(query)
-        logging.info(f"Succesfully downloaded query: {query}")
-    except:
-        logging.info(f"Something went wrong for query: {query}")
+    scihub.download(query)
 
 
 def main():
