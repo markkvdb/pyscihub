@@ -1,10 +1,11 @@
 """Console script for pyscihub."""
 import sys
+import logging
 import click
 from time import sleep
 from random import gauss
 
-from pyscihub import SciHub
+from .pyscihub import SciHub
 
 
 @click.group()
@@ -38,7 +39,6 @@ def make_file(ctx, file_path):
         for query in bar:
             try:
                 scihub.fetch_search(query)
-                click.echo(f"Succesfully downloaded query: {query}")
             except:
                 click.echo(f"Something went wrong for query: {query}")
 
@@ -54,9 +54,9 @@ def make_query(ctx, query):
 
     try:
         scihub.fetch_search(query)
-        click.echo(f"Succesfully downloaded query: {query}")
+        logging.info(f"Succesfully downloaded query: {query}")
     except:
-        click.echo(f"Something went wrong for query: {query}")
+        logging.info(f"Something went wrong for query: {query}")
 
 
 def main():

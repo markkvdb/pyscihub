@@ -105,3 +105,5 @@ ENV/
 .vscode/
 
 output/
+demo.txt
+Test.xlsx
