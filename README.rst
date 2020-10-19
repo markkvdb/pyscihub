@@ -26,11 +26,15 @@ Command-line and Python API to download PDFs directly from Sci-Hub
 Installation
 --------
 
-Installing the Sci-Hub CLI is easiest using pip as
+Installing the Sci-Hub CLI is as easy as cloning this repo and installing it using pip, i.e.,
 
 .. code-block:: bash
 
+    git clone https://github.com/markkvdb/pyscihub.git
+    cd pyscihub
     pip install -e .
+
+If you don't want to change the standard output folder, then make sure that you create a `output` folder in the `pyscihub` folder.
 
 Usage
 --------
@@ -45,4 +49,6 @@ or with a user-provided file containing one query per line as
 
 .. code-block:: bash
 
-    pyscihub file demo.txt
+    pyscihub file <LOCATION FILE>
+
+If everything goes well, a file `output/pdf_paths.csv` is created containing the location of the PDFs of all requested queries. If Sci-Hub cannot find the corresponding PDF then the field is empty.
