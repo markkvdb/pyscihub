@@ -12,7 +12,7 @@ with open("HISTORY.rst") as history_file:
 
 requirements = [
     "Click>=7.0",
-    "bs4>=4.0",
+    "beautifulsoup4>=4.0",
 ]
 
 setup_requirements = []
