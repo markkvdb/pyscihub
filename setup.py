@@ -17,7 +17,7 @@ requirements = [
 
 setup_requirements = []
 
-test_requirements = []
+test_requirements = ["pytest>=6.0"]
 
 setup(
     author="Mark van der Broek",

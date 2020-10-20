@@ -33,12 +33,13 @@ def ref_regex():
 
 
 def ref_regex_simple():
+    """Return regex query to extract authors and title from reference."""
     FIRST_AUTHOR = r"(?P<first_author>[A-Z][\w\-']+(?:,\s(?:[A-Z]\.)+))"
     SECOND_AUTHOR = r"(?P<other_author>(?:[A-Z]\.)+\s[A-Z][\w\-']+)"
     ET_AL = r"et al\."
     BETWEEN_AUTHORS = r"(?:(?:[,]?\sand\s)|(?:\,\s))"
     ALL_AUTHORS = (
-        r"(?:"
+        r"(?:(?P<authors>"
         + FIRST_AUTHOR
         + r"(?:(?:"
         + BETWEEN_AUTHORS
@@ -46,7 +47,7 @@ def ref_regex_simple():
         + r")+|(?:"
         + BETWEEN_AUTHORS
         + ET_AL
-        + r"))?\,\s)?"
+        + r"))?)\,\s)?"
     )  # optional
     TITLE = r"(?P<title>[^.]+[\.]?)"
 
@@ -55,7 +56,7 @@ def ref_regex_simple():
 
 def extract_valid_query(string):
     """Valid query either contains title, doi or url."""
-    DOI_REGEX = r"10.\d{4,9}\/[-._;()\/:A-Z0-9]+"
+    DOI_REGEX = r"10.\d{4,9}\/[-._;()\/:a-zA-Z0-9]+"
     URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
     REF_REGEX = ref_regex_simple()
 
@@ -75,6 +76,7 @@ def extract_valid_query(string):
 
 
 def valid_fn(path, fn_name):
+    """Shorten file name in case it exceeds system's maximum length."""
     PC_PATH_MAX = os.pathconf("/", "PC_PATH_MAX") - 4
     PC_NAME_MAX = os.pathconf("/", "PC_NAME_MAX") - 4
     full_len = len(path + fn_name)

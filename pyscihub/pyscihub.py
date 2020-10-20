@@ -57,14 +57,13 @@ class SciHub(object):
         pdf_paths = dict()
 
         if f_path.is_file():
+            logging.debug("pdf_paths.csv file detected.")
             with open(f_path, newline="") as f:
-                reader = csv.reader(f)
+                reader = csv.DictReader(f)
                 for row in reader:
                     if row["pdf_path"] != "":
                         if Path(row["pdf_path"]).is_file():
                             pdf_paths[row["query"]] = row["pdf_path"]
-                        else:
-                            del pdf_paths[row["query"]]
 
         return pdf_paths
 
