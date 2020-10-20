@@ -14,6 +14,8 @@ from .tools import extract_valid_query, valid_fn
 
 
 class SciHub(object):
+    """The SciHub object can be used to download PDFs from SciHub after initialisation."""
+
     def __init__(self, url, output_path):
         """Initialises the SciHub object with the Sci-Hub url ``url`` and writes all PDFs to the ``output_path`` folder.
 
