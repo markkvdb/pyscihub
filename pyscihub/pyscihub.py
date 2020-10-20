@@ -92,19 +92,22 @@ class SciHub(object):
             return None
         else:
             response = self.session.post(self.url, data={"request": clean_query})
+            return self.handle_response(response)
 
-            if response.status_code != 200:
-                logging.error(f"Could not connect to Sci-Hub via: {response.url}")
-                return None
-            else:
-                # if status code is okay then transform into beautiful soup
-                soup = BeautifulSoup(response.text, features="lxml")
-                if self.page_is_valid(soup):
-                    data = self.extract_data(soup)
-                    if self.data_is_valid(data):
-                        return self.save_pdf(data)
+    def handle_response(self, response):
+        """Handle a valid response."""
+        if response.status_code != 200:
+            logging.error(f"Could not connect to Sci-Hub via: {response.url}")
+            return None
+        else:
+            # if status code is okay then transform into beautiful soup
+            soup = BeautifulSoup(response.text, features="lxml")
+            if self.page_is_valid(soup):
+                data = self.extract_data(soup)
+                if self.data_is_valid(data):
+                    return self.save_pdf(data)
 
-                return None
+            return None
 
     def extract_data(self, soup: BeautifulSoup):
         # url regex
