@@ -109,6 +109,17 @@ class SciHub(object):
 
             return None
 
+    def page_is_valid(self, soup: BeautifulSoup):
+        """Sometimes we cannot find the article or we need to solve a CAPTCHA."""
+        if re.search(r"article not found", soup.get_text()):
+            logging.warn(f"Could not find article.")
+            return False
+        elif re.search(r"Для просмотра статьи разгадайте капчу", soup.get_text()):
+            logging.warn(f"Could not open page due to CAPTCHA.")
+            return False
+        else:
+            return True
+
     def extract_data(self, soup: BeautifulSoup):
         # url regex
         URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -129,17 +140,6 @@ class SciHub(object):
     def data_is_valid(self, data):
         """Check if data is valid"""
         if data["pdf"] is None:
-            return False
-        else:
-            return True
-
-    def page_is_valid(self, soup: BeautifulSoup):
-        """Sometimes we cannot find the article or we need to solve a CAPTCHA."""
-        if re.search(r"article not found", soup.get_text()):
-            logging.warn(f"Could not find article.")
-            return False
-        elif re.search(r"Для просмотра статьи разгадайте капчу", soup.get_text()):
-            logging.warn(f"Could not open page due to CAPTCHA.")
             return False
         else:
             return True
