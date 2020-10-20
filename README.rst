@@ -45,14 +45,14 @@ Usage
 
 Tool can be used with a single query, e.g.,
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyscihub single "Your paper"
+    $ pyscihub single "Your paper"
 
 or with a user-provided file containing one query per line as
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyscihub file <LOCATION FILE>
+    $ pyscihub file <LOCATION FILE>
 
-If everything goes well, a file `output/pdf_paths.csv` is created containing the location of the PDFs of all requested queries. If Sci-Hub cannot find the corresponding PDF then the field is empty.
+If everything goes well, a file ``output/pdf_paths.csv`` is created containing the location of the PDFs of all requested queries. If Sci-Hub cannot find the corresponding PDF then the field is empty.

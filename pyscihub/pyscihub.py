@@ -20,7 +20,14 @@ class SciHub(object):
         self.session = requests.Session()
 
     def download(self, queries):
-        """Download articles for queries."""
+        """Download articles for provided queries
+
+        Args:
+            queries (list(str)): List of queries to look up
+
+        Raises:
+            ValueError: If argument is not a string or list of strings
+        """
         # make sure queries is of the right format
         if type(queries) == str:
             queries = list(queries)
@@ -52,7 +59,11 @@ class SciHub(object):
             self.save_pdf_paths(pdf_paths)
 
     def get_pdf_paths(self):
-        """Check for existing pdf_path file or return empty one."""
+        """Checks for existing pdf_path file or return empty one
+
+        Returns:
+            dict: Dictionary containing existing PDFs
+        """
         f_path = self.output_path / "pdf_paths.csv"
         pdf_paths = dict()
 
@@ -68,7 +79,11 @@ class SciHub(object):
         return pdf_paths
 
     def save_pdf_paths(self, pdf_paths):
-        """Save pdf_paths (overwrite)."""
+        """Saves the queries and corresponding paths to the PDFs after downloading
+
+        Args:
+            pdf_paths (dict): Dictionary of paths to the downloaded PDFs
+        """
         f_path = self.output_path / "pdf_paths.csv"
 
         if len(pdf_paths.keys()) > 0:
@@ -79,11 +94,26 @@ class SciHub(object):
                     w.writerow([k, v])
 
     def exclude_existing_queries(self, queries, pdf_paths):
-        """Remove queries of which we already have a PDF file."""
+        """Remove queries of which we already have a PDF file
+
+        Args:
+            queries (list(str)): List of queries to look up
+            pdf_paths (dict): Dictionary of paths to the downloaded PDFs
+
+        Returns:
+            [type]: Filtered list of queries
+        """
         return [query for query in queries if query not in pdf_paths.keys()]
 
     def fetch_search(self, query):
-        """Try to find page and return URL and PDF link."""
+        """Try to find page and return PDF location if succeeded
+
+        Args:
+            query (list(str)): List of queries to look up
+
+        Returns:
+            str: File location of downloaded PDF corresponding to query
+        """
         clean_query = extract_valid_query(query)
         if not clean_query:
             logging.error(
@@ -95,7 +125,14 @@ class SciHub(object):
             return self.handle_response(response)
 
     def handle_response(self, response):
-        """Handle a valid response."""
+        """Handle a valid response
+
+        Args:
+            response (Response): requests.Response object
+
+        Returns:
+            str: File location of downloaded PDF corresponding to query
+        """
         if response.status_code != 200:
             logging.error(f"Could not connect to Sci-Hub via: {response.url}")
             return None
@@ -110,7 +147,14 @@ class SciHub(object):
             return None
 
     def page_is_valid(self, soup: BeautifulSoup):
-        """Sometimes we cannot find the article or we need to solve a CAPTCHA."""
+        """Sometimes we cannot find the article or we need to solve a CAPTCHA
+
+        Args:
+            soup (BeautifulSoup): Soup of the requested search query
+
+        Returns:
+            bool: True if shown page is not a missing article or CAPTCHA page
+        """
         if re.search(r"article not found", soup.get_text()):
             logging.warn(f"Could not find article.")
             return False
@@ -121,7 +165,14 @@ class SciHub(object):
             return True
 
     def extract_data(self, soup: BeautifulSoup):
-        # url regex
+        """Extract citation, URL and PDF link from page
+
+        Args:
+            soup (BeautifulSoup): Soup of the requested search query
+
+        Returns:
+            dict: A dictionary containing the citation, URL and PDF link
+        """
         URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
         pdf_url = re.findall(
             URL_REGEX, soup.find("div", id="buttons").select("ul li a")[0]["onclick"]
@@ -138,14 +189,28 @@ class SciHub(object):
         }
 
     def data_is_valid(self, data):
-        """Check if data is valid"""
+        """Check if extracted data contains a valid PDF link
+
+        Args:
+            data (dict): A dictionary containing the citation, URL and PDF link
+
+        Returns:
+            bool: True if data contains a PDF link
+        """
         if data["pdf"] is None:
             return False
         else:
             return True
 
     def save_pdf(self, data):
-        """Save pdf if provided."""
+        """Try to download the PDF from the link and save it to the output folder
+
+        Args:
+            data (dict): A dictionary containing the citation, URL and PDF link
+
+        Returns:
+            str: File location of downloaded PDF corresponding to query
+        """
         # open PDF
         response = requests.get(data["pdf"])
 
