@@ -26,15 +26,19 @@ Command-line and Python API to download PDFs directly from Sci-Hub
 Installation
 ------------------
 
-Installing the Sci-Hub CLI is as easy as cloning this repo and installing it using pip, i.e.,
+To install pyscihub, run this command in your terminal:
 
-.. code-block:: bash
+.. code-block:: console
 
-    git clone https://github.com/markkvdb/pyscihub.git
-    cd pyscihub
-    pip install -e .
+    $ pip install pyscihub
 
-If you don't want to change the standard output folder, then make sure that you create a `output` folder in the `pyscihub` folder.
+This is the preferred method to install pyscihub, as it will always install the most recent stable release.
+
+If you don't have `pip`_ installed, this `Python installation guide`_ can guide
+you through the process.
+
+.. _pip: https://pip.pypa.io
+.. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
 
 Usage
 ------------------
