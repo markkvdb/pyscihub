@@ -137,7 +137,7 @@ def test_empty_pdf_path(init_empty_scihub):
     """Test that pdf_paths dictionary is indeed empty."""
     scihub = init_empty_scihub
 
-    pdf_paths = scihub.get_pdf_paths()
+    pdf_paths = scihub._get_pdf_paths()
     assert type(pdf_paths) == dict
     assert len(pdf_paths) == 0
 
@@ -146,7 +146,7 @@ def test_populated_pdf_paths(init_populated_scihub):
     """Test that pdf_paths contains pdf_paths of entries in CSV AND actual files."""
     scihub = init_populated_scihub
 
-    pdf_paths = scihub.get_pdf_paths()
+    pdf_paths = scihub._get_pdf_paths()
     print(pdf_paths)
     assert pdf_paths[
         "A heuristic algorithm for a single vehicle static bike sharing rebalancing problem"
