@@ -10,6 +10,11 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
+requirements = [
+    "Click>=7.0",
+    "bs4>=4.0",
+]
+
 setup_requirements = []
 
 test_requirements = []
@@ -17,7 +22,7 @@ test_requirements = []
 setup(
     author="Mark van der Broek",
     author_email="markvanderbroek@gmail.com",
-    python_requires=">=3.5",
+    python_requires=">=3.8",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
@@ -25,7 +30,6 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
     ],
     description="Command-line and Python API to download PDFs directly from Sci-Hub",
     entry_points={
