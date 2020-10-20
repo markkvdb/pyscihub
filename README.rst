@@ -22,6 +22,11 @@ Command-line and Python API to download PDFs directly from Sci-Hub
 * Free software: MIT license
 * Documentation: https://pyscihub.readthedocs.io.
 
+Features
+
+* Download 1,000s of academic articles without an academic account in one command
+* Add new articles to the list without downloading existing articles twice
+* Save important time looking up and downloading articles
 
 Installation
 ------------------
