@@ -8,7 +8,7 @@ Welcome to pyscihub's documentation!
    readme
    installation
    usage
-   modules
+   API
    contributing
    authors
    history
