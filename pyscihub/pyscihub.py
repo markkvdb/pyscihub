@@ -15,6 +15,12 @@ from .tools import extract_valid_query, valid_fn
 
 class SciHub(object):
     def __init__(self, url, output_path):
+        """Initialises the SciHub object with the Sci-Hub url ``url`` and writes all PDFs to the ``output_path`` folder.
+
+        Args:
+            url (str): Sci-Hub URL to use
+            output_path (Path): The folder to download all PDFs to
+        """
         self.url = url
         self.output_path = Path(output_path)
         self.session = requests.Session()
@@ -35,16 +41,16 @@ class SciHub(object):
             raise ValueError("queries argument should be a list or a single string.")
 
         # get existing downloads or create empty dict for pdf locations
-        pdf_paths = self.get_pdf_paths()
+        pdf_paths = self._get_pdf_paths()
 
         # remove queries that have a valid pdf file already
-        queries = self.exclude_existing_queries(queries, pdf_paths)
+        queries = self._exclude_existing_queries(queries, pdf_paths)
 
         try:
             with click.progressbar(queries) as bar:
                 for query in bar:
                     try:
-                        pdf_path = self.fetch_search(query)
+                        pdf_path = self._fetch_search(query)
                         pdf_paths[query] = pdf_path
                     except (KeyboardInterrupt, SystemExit) as err:
                         raise err
@@ -56,9 +62,9 @@ class SciHub(object):
                 f"Exiting program. Saving PDF information to {self.output_path}."
             )
         finally:
-            self.save_pdf_paths(pdf_paths)
+            self._save_pdf_paths(pdf_paths)
 
-    def get_pdf_paths(self):
+    def _get_pdf_paths(self):
         """Checks for existing pdf_path file or return empty one
 
         Returns:
@@ -78,7 +84,7 @@ class SciHub(object):
 
         return pdf_paths
 
-    def save_pdf_paths(self, pdf_paths):
+    def _save_pdf_paths(self, pdf_paths):
         """Saves the queries and corresponding paths to the PDFs after downloading
 
         Args:
@@ -93,7 +99,7 @@ class SciHub(object):
                 for k, v in pdf_paths.items():
                     w.writerow([k, v])
 
-    def exclude_existing_queries(self, queries, pdf_paths):
+    def _exclude_existing_queries(self, queries, pdf_paths):
         """Remove queries of which we already have a PDF file
 
         Args:
@@ -101,11 +107,11 @@ class SciHub(object):
             pdf_paths (dict): Dictionary of paths to the downloaded PDFs
 
         Returns:
-            [type]: Filtered list of queries
+            list(str): Filtered list of queries
         """
         return [query for query in queries if query not in pdf_paths.keys()]
 
-    def fetch_search(self, query):
+    def _fetch_search(self, query):
         """Try to find page and return PDF location if succeeded
 
         Args:
@@ -122,9 +128,9 @@ class SciHub(object):
             return None
         else:
             response = self.session.post(self.url, data={"request": clean_query})
-            return self.handle_response(response)
+            return self._handle_response(response)
 
-    def handle_response(self, response):
+    def _handle_response(self, response):
         """Handle a valid response
 
         Args:
@@ -139,14 +145,14 @@ class SciHub(object):
         else:
             # if status code is okay then transform into beautiful soup
             soup = BeautifulSoup(response.text, features="lxml")
-            if self.page_is_valid(soup):
-                data = self.extract_data(soup)
-                if self.data_is_valid(data):
-                    return self.save_pdf(data)
+            if self._page_is_valid(soup):
+                data = self._extract_data(soup)
+                if self._data_is_valid(data):
+                    return self._save_pdf(data)
 
             return None
 
-    def page_is_valid(self, soup: BeautifulSoup):
+    def _page_is_valid(self, soup: BeautifulSoup):
         """Sometimes we cannot find the article or we need to solve a CAPTCHA
 
         Args:
@@ -164,7 +170,7 @@ class SciHub(object):
         else:
             return True
 
-    def extract_data(self, soup: BeautifulSoup):
+    def _extract_data(self, soup: BeautifulSoup):
         """Extract citation, URL and PDF link from page
 
         Args:
@@ -188,7 +194,7 @@ class SciHub(object):
             "pdf": pdf_url,
         }
 
-    def data_is_valid(self, data):
+    def _data_is_valid(self, data):
         """Check if extracted data contains a valid PDF link
 
         Args:
@@ -202,7 +208,7 @@ class SciHub(object):
         else:
             return True
 
-    def save_pdf(self, data):
+    def _save_pdf(self, data):
         """Try to download the PDF from the link and save it to the output folder
 
         Args:
