@@ -44,6 +44,7 @@ If you don't have `pipx`_ installed, this `Python installation guide`_ can guide
 you through the process.
 
 .. _pipx: https://pipxproject.github.io/pipx/
+.. _pip: https://pip.pypa.io/en/stable/installing/
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
 
 Usage
