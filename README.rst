@@ -35,14 +35,15 @@ To install pyscihub, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install pyscihub
+    $ pipx install pyscihub
 
-This is the preferred method to install pyscihub, as it will always install the most recent stable release.
+This is the preferred method to install pyscihub, as it will always install the most recent stable release. 
+Furthermore, `pipx`_ is preferred over `pip`_, since the former will not pollute your global environment with packages needed for `pyscihub`_.
 
-If you don't have `pip`_ installed, this `Python installation guide`_ can guide
+If you don't have `pipx`_ installed, this `Python installation guide`_ can guide
 you through the process.
 
-.. _pip: https://pip.pypa.io
+.. _pipx: https://pipxproject.github.io/pipx/
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
 
 Usage
