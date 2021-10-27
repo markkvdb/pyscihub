@@ -29,7 +29,7 @@ def cli(ctx, output, verbose):
 @click.argument("file_path", type=click.Path(exists=True))
 @click.pass_context
 def make_file(ctx, file_path):
-    scihub = SciHub("https://sci-hub.se", ctx.obj["OUTPUT"])
+    scihub = SciHub("https://sci-hub.ru", ctx.obj["OUTPUT"])
 
     # open file
     with open(file_path, "r") as f:
@@ -42,7 +42,7 @@ def make_file(ctx, file_path):
 @click.argument("query", type=str)
 @click.pass_context
 def make_query(ctx, query):
-    scihub = SciHub("https://sci-hub.se", ctx.obj["OUTPUT"])
+    scihub = SciHub("https://sci-hub.ru", ctx.obj["OUTPUT"])
     scihub.download(query)
 
 
