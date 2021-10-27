@@ -21,8 +21,6 @@ jobs:
         pip install setuptools wheel twine
     - name: Run tests
       run: |
-        flake8 pyscihub tests
-        python setup.py test
         tox
     - name: Build the package
       run: |
