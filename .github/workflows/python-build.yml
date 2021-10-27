@@ -19,6 +19,11 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements_dev.txt
         pip install setuptools wheel twine
+    - name: Run tests
+      run: |
+        flake8 pyscihub tests
+        python setup.py test
+        tox
     - name: Build the package
       run: |
         python setup.py sdist bdist_wheel
