@@ -1,8 +1,9 @@
 """Tools for handling queries."""
 
-import re
-import os
 import logging
+import os
+import re
+from pathlib import Path
 
 
 def ref_regex():
@@ -75,7 +76,7 @@ def extract_valid_query(string):
     return query
 
 
-def valid_fn(path, fn_name):
+def valid_fn(path: Path, fn_name: str):
     """Shorten file name in case it exceeds system's maximum length."""
     PC_PATH_MAX = os.pathconf("/", "PC_PATH_MAX") - 4
     PC_NAME_MAX = os.pathconf("/", "PC_NAME_MAX") - 4

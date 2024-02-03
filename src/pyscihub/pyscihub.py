@@ -1,14 +1,15 @@
 """Main module."""
 
+import csv
 import logging
-import sys
+import re
+import unicodedata
+from pathlib import Path
+from typing import List, Union
+
 import click
 import requests
 from bs4 import BeautifulSoup
-import re
-from pathlib import Path
-import unicodedata
-import csv
 
 from .tools import extract_valid_query, valid_fn
 
@@ -16,18 +17,21 @@ from .tools import extract_valid_query, valid_fn
 class SciHub(object):
     """The SciHub object can be used to download PDFs from SciHub after initialisation."""
 
-    def __init__(self, url, output_path):
+    def __init__(self, url: str, output: Path):
         """Initialises the SciHub object with the Sci-Hub url ``url`` and writes all PDFs to the ``output_path`` folder.
 
         Args:
             url (str): Sci-Hub URL to use
             output_path (Path): The folder to download all PDFs to
         """
-        self.url = url
-        self.output_path = Path(output_path)
+        # make sure that the output path exists
+        output.mkdir(parents=True, exist_ok=True)
+
+        self._url = url
+        self._output = output
         self.session = requests.Session()
 
-    def download(self, queries):
+    def download(self, queries: Union[List[str], str]):
         """Download articles for provided queries
 
         Args:
