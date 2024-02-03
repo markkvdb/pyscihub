@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pyscihub"
+version = "0.2.0"
+description = "Download from SciHub"
+authors = ["markkvdb <github@mvanderbroek.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+click = "^8.1.7"
+requests = "^2.31.0"
+beautifulsoup4 = "^4.12.3"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
