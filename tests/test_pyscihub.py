@@ -3,17 +3,15 @@
 """Tests for `pyscihub` package."""
 
 
-import pytest
+import csv
 import re
 import shutil
-import csv
-from click.testing import CliRunner
 from pathlib import Path
 
-from pyscihub import pyscihub
-from pyscihub import cli
-from pyscihub import tools
+import pytest
+from click.testing import CliRunner
 
+from pyscihub import cli, pyscihub, tools
 
 TEST_REFERENCES = [
     {
@@ -93,16 +91,18 @@ def test_doi_and_url_regex(test_query):
 
 
 @pytest.fixture
-def init_empty_scihub(tmpdir):
-    test_output_path = tmpdir.mkdir("output")
-    return pyscihub.SciHub("https://sci-hub.se", test_output_path.realpath())
+def init_empty_scihub(tmp_path: str) -> pyscihub.SciHub:
+    test_output_path = Path(tmp_path) / "output"
+    test_output_path.mkdir()
+    return pyscihub.SciHub("https://sci-hub.se", test_output_path)
 
 
 @pytest.fixture
-def init_populated_scihub(tmpdir):
+def init_populated_scihub(tmp_path: str) -> pyscihub.SciHub:
     # create new folder and move data from tests/data/demo_pdfs
-    test_output_path = Path(tmpdir.mkdir("output"))
-    demo_path = Path("data/demo_pdfs")
+    test_output_path = Path(tmp_path) / "output"
+    test_output_path.mkdir()
+    demo_path = Path(__file__).parent / "data/demo_pdfs"
     demo_files = [
         demo_file for demo_file in Path(demo_path).iterdir() if demo_file.is_file()
     ]
@@ -110,13 +110,13 @@ def init_populated_scihub(tmpdir):
         shutil.copy2(demo_file, test_output_path)
 
     # initiate scihub
-    scihub = pyscihub.SciHub("https://sci-hub.se", str(test_output_path.absolute()))
+    scihub = pyscihub.SciHub("https://sci-hub.se", test_output_path)
 
     # change file location of pdfs
     lines = list(csv.reader(open(test_output_path / "pdf_paths.csv", "r")))
     for line in lines[1:]:
         print(line[1])
-        line[1] = f"{tmpdir.realpath()}/{line[1]}"
+        line[1] = f"{tmp_path}/{line[1]}"
         print(line[1])
     writer = csv.writer(open(test_output_path / "pdf_paths.csv", "w"))
     writer.writerows(lines)
@@ -124,16 +124,17 @@ def init_populated_scihub(tmpdir):
     return scihub
 
 
-def test_download_arg_type(init_empty_scihub):
+def test_download_arg_type(init_empty_scihub: pyscihub.SciHub):
     """Test something."""
     scihub = init_empty_scihub
 
     with pytest.raises(ValueError) as excinfo:
         scihub.download(set("abc"))
+
         assert "queries argument should be a list or a single string." in excinfo.value
 
 
-def test_empty_pdf_path(init_empty_scihub):
+def test_empty_pdf_path(init_empty_scihub: pyscihub.SciHub):
     """Test that pdf_paths dictionary is indeed empty."""
     scihub = init_empty_scihub
 
@@ -142,7 +143,7 @@ def test_empty_pdf_path(init_empty_scihub):
     assert len(pdf_paths) == 0
 
 
-def test_populated_pdf_paths(init_populated_scihub):
+def test_populated_pdf_paths(init_populated_scihub: pyscihub.SciHub):
     """Test that pdf_paths contains pdf_paths of entries in CSV AND actual files."""
     scihub = init_populated_scihub
 

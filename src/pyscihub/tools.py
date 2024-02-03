@@ -1,11 +1,12 @@
 """Tools for handling queries."""
 
-import re
-import os
 import logging
+import os
+import re
+from pathlib import Path
 
 
-def ref_regex():
+def ref_regex() -> str:
     """Return regex for valid reference."""
     FIRST_AUTHOR = r"(?P<first_author>[A-Z][\w\-']+(?:,\s(?:[A-Z]\.)+))"
     SECOND_AUTHOR = r"(?P<other_author>(?:[A-Z]\.)+\s[A-Z][\w\-']+)"
@@ -32,7 +33,7 @@ def ref_regex():
     return ALL_AUTHORS + TITLE + JOURNAL + YEAR + VOLUME + PAGE
 
 
-def ref_regex_simple():
+def ref_regex_simple() -> str:
     """Return regex query to extract authors and title from reference."""
     FIRST_AUTHOR = r"(?P<first_author>[A-Z][\w\-']+(?:,\s(?:[A-Z]\.)+))"
     SECOND_AUTHOR = r"(?P<other_author>(?:[A-Z]\.)+\s[A-Z][\w\-']+)"
@@ -54,7 +55,7 @@ def ref_regex_simple():
     return r"^" + ALL_AUTHORS + TITLE
 
 
-def extract_valid_query(string):
+def extract_valid_query(string: str) -> str | None:
     """Valid query either contains title, doi or url."""
     DOI_REGEX = r"10.\d{4,9}\/[-._;()\/:a-zA-Z0-9]+"
     URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -75,7 +76,7 @@ def extract_valid_query(string):
     return query
 
 
-def valid_fn(path, fn_name):
+def valid_fn(path: str, fn_name: str) -> str:
     """Shorten file name in case it exceeds system's maximum length."""
     PC_PATH_MAX = os.pathconf("/", "PC_PATH_MAX") - 4
     PC_NAME_MAX = os.pathconf("/", "PC_NAME_MAX") - 4

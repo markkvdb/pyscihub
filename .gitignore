@@ -107,3 +107,4 @@ ENV/
 output/
 demo.txt
 Test.xlsx
+.DS_Store
